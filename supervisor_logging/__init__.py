@@ -76,6 +76,9 @@ def eventdata(payload):
     Parse a Supervisor event.
     """
 
+    if not payload.endswith('\n'):
+        payload += '\n'
+
     headerinfo, data = payload.split('\n', 1)
     headers = get_headers(headerinfo)
     return headers, data
@@ -133,7 +136,7 @@ def main():
             args=(),
             exc_info=None,
         )
-        event.process = int(event_headers['pid'])
+        event.process = int(event_headers['pid']) if 'pid' in event_headers else 0
         handler.handle(event)
 
 
